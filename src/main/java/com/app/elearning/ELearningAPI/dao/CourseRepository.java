@@ -13,12 +13,11 @@ import com.app.elearning.ELearningAPI.model.UserCourse;
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Integer> {
 	
+	
 	List<Course> findAll();
 	
 	@Query("select new com.app.elearning.ELearningAPI.model.Course(c.cName,c.tutor,c.duration,c.imageurl) from com.app.elearning.ELearningAPI.model.Course c where c.cName=:cname")
 	Course findByCourseName(@Param("cname") String cname);
 
 	 void save(UserCourse uc);
-	
-	
 }
