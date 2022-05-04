@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.model;
+package com.elearningapp.model;
 
 import java.time.LocalDate;
 import java.util.Date;

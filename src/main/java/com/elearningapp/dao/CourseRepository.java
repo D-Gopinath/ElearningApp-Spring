@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.dao;
+package com.elearningapp.dao;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.app.elearning.ELearningAPI.model.Course;
-import com.app.elearning.ELearningAPI.model.UserCourse;
+import com.elearningapp.model.Course;
+import com.elearningapp.model.UserCourse;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Integer> {
@@ -16,7 +16,7 @@ public interface CourseRepository extends JpaRepository<Course,Integer> {
 	
 	List<Course> findAll();
 	
-	@Query("select new com.app.elearning.ELearningAPI.model.Course(c.cName,c.tutor,c.duration,c.imageurl) from com.app.elearning.ELearningAPI.model.Course c where c.cName=:cname")
+	@Query("select new com.elearningapp.model.Course(c.cName,c.tutor,c.duration,c.imageurl) from com.elearningapp.model.Course c where c.cName=:cname")
 	Course findByCourseName(@Param("cname") String cname);
 
 	 void save(UserCourse uc);

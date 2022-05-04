@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.dao;
+package com.elearningapp.dao;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.app.elearning.ELearningAPI.model.User;
+import com.elearningapp.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer>{
@@ -19,18 +19,17 @@ public interface UserRepository extends JpaRepository<User,Integer>{
 	
 	List<User> findAll();
 	 
-	@Query("select new com.app.elearning.ELearningAPI.model.User(u.name,u.email,u.password) from com.app.elearning.ELearningAPI.model.User u where u.email=:userEmail and u.password=:userPassword")
-	User findByEmailAndPassword(@Param("userEmail") String userEmail, @Param("userPassword") String userPassword);
+	@Query("select u from com.elearningapp.model.User u where u.email=:userEmail")
+	User findByEmail(@Param("userEmail") String userEmail);
 	
-	Optional<User> findById(Integer id);
 	
 	@Modifying
-	@Query("delete from User u where u.id=:id")
+	@Query("delete from com.elearningapp.model.User u where u.id=:id")
 	void deleteById(@Param("id") Integer id);
 	
 	@Transactional
 	@Modifying
-	@Query("update User u set u.password = :password where u.id=:id")
+	@Query("update com.elearningapp.model.User u set u.password = :password where u.id=:id")
 	void changePassword(@Param("id") Integer id, @Param("password") String password);
 
 }

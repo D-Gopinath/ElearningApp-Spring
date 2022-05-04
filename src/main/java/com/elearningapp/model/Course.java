@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.model;
+package com.elearningapp.model;
 
 import java.util.ArrayList;
 import java.util.List;

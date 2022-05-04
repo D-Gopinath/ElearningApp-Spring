@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.controller;
+package com.elearningapp.controller;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.elearning.ELearningAPI.dao.CourseRepository;
-import com.app.elearning.ELearningAPI.model.Course;
-import com.app.elearning.ELearningAPI.model.UserCourse;
+import com.elearningapp.dao.CourseRepository;
+import com.elearningapp.model.Course;
+import com.elearningapp.model.UserCourse;
 @RestController
 public class CourseController {
 	

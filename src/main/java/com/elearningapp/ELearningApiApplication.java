@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI;
+package com.elearningapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

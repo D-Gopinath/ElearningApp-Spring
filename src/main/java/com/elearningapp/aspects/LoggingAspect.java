@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.aspects;
+package com.elearningapp.aspects;
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ public class LoggingAspect {
 	
 	private final Logger log  = LoggerFactory.getLogger(this.getClass());
 	
-	@Around("execution (* com.app.elearning.ELearningAPI.controller.CourseController+.*(..))")
+	@Around("execution (* com.elearningapp.controller.CourseController+.*(..))")
 	public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		System.out.println("logaround is running");
 		System.out.println("Method name:"+ joinPoint.getSignature().getName());
@@ -27,7 +27,7 @@ public class LoggingAspect {
 		return object;
 	}
 	
-	@AfterReturning(pointcut ="execution(* com.app.elearning.ELearningAPI.controller.UserController+.*(..))",returning="result")
+	@AfterReturning(pointcut ="execution(* com.elearningapp.controller.UserController+.*(..))",returning="result")
 	public Object log2Around(JoinPoint joinPoint, Object result) {
 		System.out.println("log2around is running");
 		System.out.println("Method name:"+ joinPoint.getSignature().getName());

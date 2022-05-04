@@ -1,4 +1,4 @@
-package com.app.elearning.ELearningAPI.model;
+package com.elearningapp.model;
 
 
 import javax.persistence.Column;
@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name="users_details")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 	@Id
@@ -28,15 +30,11 @@ public class User {
 	
 	private String name;
 	
-	private Long phone;
+	private String phone;
 	
 	private String email;
 	
 	private String password;
 	
-	public User(String name,String email,String password) {
-		this.name=name;
-		this.email=email;
-		this.password=password;
-	}
+	
 }
