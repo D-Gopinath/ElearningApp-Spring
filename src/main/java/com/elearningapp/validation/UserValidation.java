@@ -40,4 +40,10 @@ public class UserValidation {
 			throw new ValidationException("Invalid Password");
 		}
 	}
+	
+	public static void validatePassword(String password) throws ValidationException{
+		if (password.length() < 8 || password.length() > 16) {
+			throw new ValidationException("Invalid Password");
+		}
+	}
 }

@@ -58,5 +58,15 @@ public class UserService {
 			throw new Exception(e.getMessage());
 		}
 	}
+	
+	public void updatePassword(Integer id, String password) throws Exception {
+		try {
+			UserValidation.validatePassword(password);
+			userRepository.changePassword(id, password);
+		}
+		catch(Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
 
 }

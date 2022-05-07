@@ -4,38 +4,41 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.elearningapp.dao.CourseRepository;
 import com.elearningapp.model.Course;
 import com.elearningapp.model.UserCourse;
+import com.elearningapp.service.CourseService;
 @RestController
 public class CourseController {
-	
+		
 	@Autowired
-	CourseRepository courseRepository;
-	
-	@Autowired
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	CourseService courseService;
 	
 	@GetMapping("course/list")
-	public List<Course> findAll(){
-		List<Course> courseList = courseRepository.findAll();
-		return courseList;
+	public ResponseEntity<?> showAll(){
+		try {
+			List<Course> courses = courseService.showCourses();
+			return new ResponseEntity<>(courses,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 	
 	@GetMapping("course/search")
-	public Course findByCourseName(String cname){
+	public ResponseEntity<?> search(String cname){
 		Course course = null;
 		try {
-			course = courseRepository.findByCourseName(cname);
+			course = courseService.searchByName(cname);
 			if(course!=null) {
-				return course;
+				return new ResponseEntity<>(course,HttpStatus.OK);
 			}
 			else {
 				throw new Exception("Course Not Available");
@@ -43,12 +46,12 @@ public class CourseController {
 			
 		}
 		catch(Exception e) {
-			return null;
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@PostMapping("course/enroll/{cid}/{uid}")
-	public String enrollCourse(@PathVariable("cid") Integer cid, @PathVariable("uid") Integer uid){
+	public ResponseEntity<String> enrollCourse(@PathVariable("cid") Integer cid, @PathVariable("uid") Integer uid){
 		
 		UserCourse uc = new UserCourse();
 		uc.setUserId(uid);
@@ -56,21 +59,35 @@ public class CourseController {
 		uc.setDate(LocalDate.now());
 		
 		try {
-			courseRepository.save(uc);
-			return "Enrolled Successfully";
+			courseService.enroll(uc);
+			return new ResponseEntity<String>("Enrolled Successfully",HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return e.getMessage();
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 	
 	@GetMapping("courses/enrolledlist/{uid}")
-	public List<Course> viewEnrolledCourses(@PathVariable("uid") Integer uid){
-		
-		String query = "SELECT course.course_name as cName,course.tutor,course.duration,course.url FROM course INNER JOIN user_course_enrollment ON course.c_id=user_course_enrollment.course_id WHERE user_id='"+uid+"' ";
-		return namedParameterJdbcTemplate.query(query,BeanPropertyRowMapper.newInstance(Course.class));
-		
+	public ResponseEntity<?> viewEnrolledCourses(@PathVariable("uid") Integer uid){
+		try {
+			List<Course> eCourses = courseService.enrolledCourses(uid);
+			return new ResponseEntity<>(eCourses,HttpStatus.OK);
+		}
+		catch(Exception e){
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("courses/viewcourse")
+	public ResponseEntity<?> viewCourse(Integer cid){
+		try {
+			Course courseDetails = courseService.viewCourse(cid);
+			return new ResponseEntity<>(courseDetails,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 }
