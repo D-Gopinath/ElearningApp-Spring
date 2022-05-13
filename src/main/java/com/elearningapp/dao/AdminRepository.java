@@ -17,7 +17,7 @@ import com.elearningapp.model.User;
 public interface AdminRepository extends JpaRepository<User, Integer> {
 	
 	//For Admin Login
-	@Query("select u from com.elearningapp.model.User u where u.email=:email and role='admin' ")
+	@Query("select u from com.elearningapp.model.User u where u.email=:email and u.role='admin' ")
 	User findByEmail(@Param("email") String email);
 	
 	//To view all the user

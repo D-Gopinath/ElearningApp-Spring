@@ -9,9 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elearningapp.dto.Message;
 import com.elearningapp.model.Course;
+import com.elearningapp.model.CourseMenu;
 import com.elearningapp.model.UserCourse;
 import com.elearningapp.service.CourseService;
 @RestController
@@ -27,13 +30,14 @@ public class CourseController {
 			return new ResponseEntity<>(courses,HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 	
-	@GetMapping("course/search")
-	public ResponseEntity<?> search(String cname){
+	@GetMapping("course/search/{cname}")
+	public ResponseEntity<?> search(@PathVariable("cname") String cname){
 		Course course = null;
 		try {
 			course = courseService.searchByName(cname);
@@ -46,12 +50,13 @@ public class CourseController {
 			
 		}
 		catch(Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PostMapping("course/enroll/{cid}/{uid}")
-	public ResponseEntity<String> enrollCourse(@PathVariable("cid") Integer cid, @PathVariable("uid") Integer uid){
+	@GetMapping("course/enroll/{cid}/{uid}")
+	public ResponseEntity<?> enrollCourse(@PathVariable("cid") Integer cid, @PathVariable("uid") Integer uid){
 		
 		UserCourse uc = new UserCourse();
 		uc.setUserId(uid);
@@ -60,10 +65,11 @@ public class CourseController {
 		
 		try {
 			courseService.enroll(uc);
-			return new ResponseEntity<String>("Enrolled Successfully",HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -75,19 +81,49 @@ public class CourseController {
 			return new ResponseEntity<>(eCourses,HttpStatus.OK);
 		}
 		catch(Exception e){
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@GetMapping("courses/viewcourse")
-	public ResponseEntity<?> viewCourse(Integer cid){
+	@GetMapping("courses/viewcourse/{cid}")
+	public ResponseEntity<?> viewCourse(@PathVariable("cid") Integer cid){
 		try {
 			Course courseDetails = courseService.viewCourse(cid);
 			return new ResponseEntity<>(courseDetails,HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@GetMapping("courses/CourseCategory")
+	public ResponseEntity<?> showCategory(){
+		try {
+			List<CourseMenu> courses = courseService.showCourseCategory();
+			return new ResponseEntity<>(courses,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@GetMapping("courses/viewbytype")
+	public ResponseEntity<?> viewByType(@RequestParam("cId") Integer cId){
+		try {
+			List<Course> courses = courseService.viewCoursesByType(cId);
+			return new ResponseEntity<>(courses,HttpStatus.OK);
+		}
+		catch(Exception e) {
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		
 	}
 	
 }

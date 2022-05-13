@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elearningapp.dto.Message;
 import com.elearningapp.model.User;
 import com.elearningapp.service.UserService;
 
@@ -19,28 +20,30 @@ public class UserController {
 	UserService userService;
 	
 	@PostMapping("users/register")
-	public ResponseEntity<String> register(@RequestBody User user) {
+	public ResponseEntity<?> register(@RequestBody User user) {
 		
 		try {
 			userService.register(user);
-			return new ResponseEntity<String>("Successfully Registered",HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PutMapping("users/change-password/{id}")
-	public ResponseEntity<String> changePassword(@PathVariable("id") Integer id, @RequestBody User user) {
+	public ResponseEntity<?> changePassword(@PathVariable("id") Integer id, @RequestBody User user) {
 		try {
 			userService.updatePassword(id, user.getPassword());
 			System.out.println("password changed...");
-			return new ResponseEntity<String>("Password Changed Successfully",HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -54,7 +57,8 @@ public class UserController {
 			return new ResponseEntity<>(response,HttpStatus.OK);
 		}
 		catch(Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			Message message = new Message(e.getMessage());
+			return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
 		}
 	}
 
